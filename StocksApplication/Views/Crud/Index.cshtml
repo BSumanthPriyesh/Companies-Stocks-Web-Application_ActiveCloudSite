@@ -1,0 +1,157 @@
+﻿@model IEnumerable<StocksApplication.Models.Company>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+ 
+        table
+        {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+ 
+        table th
+        {
+            background-color: #B8DBFD;
+            color: #333;
+            font-weight: bold;
+        }
+ 
+        table th, table td
+        {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+ 
+        table, table table td
+        {
+            border: 10px solid #ccc;
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/main.css" />
+</head>
+
+<div style="width:100%;height:300px">
+    <canvas id="myChart" style="padding: 0;margin: auto;display: block; "> </canvas>
+</div>
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Symbol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Iexid)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Symbol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Iexid)
+                </td>
+                <td>
+                    <b><a asp-action="Edit" asp-route-symbol="@item.Symbol">Edit</a></b>
+                    <b><a asp-action="Delete" asp-route-symbol="@item.Symbol">Delete</a></b>
+                    <b><a asp-action="Details" asp-route-symbol="@item.Symbol">Details</a></b>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+$.ajax({
+            type: "POST",
+            url: "/Home/NewChart",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (chData) {
+                var aData = chData;
+                var aLabels = aData[0];
+                var aDatasets1 = aData[1];
+                var dataT = {
+                    labels: aLabels,
+                    datasets: [{
+
+
+                        data: aDatasets1,
+                        fill: false,
+                        backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
+                        borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
+                        borderWidth: 1
+                    }]
+                };
+                var ctx = $("#myChart").get(0).getContext("2d");
+                var myNewChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Companies Type vs Count'
+                            },
+                            legend: {
+                                display: false
+                                    }
+
+                        },
+                                scales: {
+                                    x: {
+                                        gridLines: { display: true },
+                                        display: true,
+                                        title: { display: true, text: 'Company Type' }
+                                    },
+                                    y: {
+                                        gridLines: { display: true },
+                                        display: true,
+                                        title: { display: true, text: 'Count' },
+                                        ticks: { stepSize: 50, beginAtZero: true }
+                                    }
+                        },
+                    }
+                });
+            }
+        });</script>
+
