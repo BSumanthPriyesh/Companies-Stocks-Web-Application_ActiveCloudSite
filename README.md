@@ -1,6 +1,6 @@
 # Companies-Stocks-Web-Application_ActiveCloudSite
 
-Tech stack: Microsoft Visual Studio 2019, ASP.NET, MVC Framework, SQL Lite, Chart.js, HTML, and CSS
+Tech stack: Microsoft Visual Studio 2019, ASP.NET, MVC, SQL Lite, Linq, Razor, Chart.js, HTML, and CSS
 
 • Developed a full-stack web application and deployed it on Microsoft Azure. This site gives the stock information of various companies for a given date derived through an API.
 
